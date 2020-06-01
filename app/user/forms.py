@@ -1,5 +1,6 @@
+from flask_uploads import IMAGES
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import InputRequired, Length, EqualTo, DataRequired, Email
@@ -18,7 +19,7 @@ class RegisterForm(FlaskForm):
     confirm_password = PasswordField('Confirm password',
                                      validators=[DataRequired()])
 
-    image = FileField()
+    image = FileField(validators=[FileAllowed(IMAGES, 'Only images are accepted.')])
 
 
 class LoginForm(FlaskForm):

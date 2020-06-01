@@ -11,7 +11,7 @@
             <div class="col-lg-4 col-lg-offset-4 pad">
                 <h2 class="text-center bold">Join Twitter! today.</h2>
                 <br/>
-                <form action="{{ url_for('user_page.register') }}" method="POST">
+                <form action="{{ url_for('user_page.register') }}" method="POST" enctype="multipart/form-data">
                     {{ form.csrf_token }}
 
                     <div class="form-group">

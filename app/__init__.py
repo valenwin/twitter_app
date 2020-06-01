@@ -10,6 +10,7 @@ app = Flask(__name__)
 Bootstrap(app)
 
 app.config.from_object(config.Config)
+
 login_manager = LoginManager(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

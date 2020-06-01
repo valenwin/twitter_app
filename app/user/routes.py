@@ -1,19 +1,27 @@
 from flask import render_template, redirect, url_for, flash
 from flask_login import login_user, login_required, logout_user
+from flask_uploads import UploadSet, configure_uploads, IMAGES
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from . import user_page
 from .forms import RegisterForm, LoginForm
 from .models import User
-from .. import db
+from .. import app, db
+
+photos = UploadSet('photos', IMAGES)
+configure_uploads(app, photos)
 
 
 @user_page.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
+        image_filename = photos.save(form.image.data)
+        image_url = photos.url(image_filename)
+
         user = User(name=form.name.data,
                     email=form.email.data,
+                    image=image_url,
                     password=generate_password_hash(form.password.data))
         db.session.add(user)
         db.session.commit()
@@ -35,6 +43,7 @@ def login():
 
         if check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
+            flash('You have been successfully logged in.')
             return redirect(url_for('index'))
         flash('Login failed.')
 

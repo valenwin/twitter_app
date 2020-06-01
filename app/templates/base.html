@@ -52,9 +52,13 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li class=""><a href="{{ url_for('user_page.register') }}">Sign Up</a></li>
-                <li class=""><a href="#login" data-toggle="modal"
-                                data-keyboard="false">Login</a></li>
+                {% if not current_user.is_authenticated %}
+                    <li><a href="{{ url_for('user_page.register') }}">Sign Up</a></li>
+                    <li><a href="#login" data-toggle="modal"
+                                    data-keyboard="false">Login</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('user_page.logout') }}">Logout</a></li>
+                {% endif %}
             </ul>
         </div><!-- /.navbar-collapse -->
     </div>
