@@ -8,13 +8,3 @@ from app.user.forms import LoginForm
 def index():
     form = LoginForm()
     return render_template('base.html', form=form)
-
-
-@app.route('/profile', methods=['GET', 'POST'])
-def index2():
-    return render_template('profile.html')
-
-
-@app.route('/timeline', methods=['GET', 'POST'])
-def index4():
-    return render_template('timeline.html')

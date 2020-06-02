@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, flash
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -18,14 +18,13 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         try:
-            image_filename = photos.save(form.image.data)
-            image_url = photos.url(image_filename)
+            image_filename = f'../../static/images/{photos.save(form.image.data)}'
         except TypeError:
-            image_url = config.Config.DEFAULT_URL_IMG
+            image_filename = config.Config.DEFAULT_URL_IMG
 
         user = User(name=form.name.data,
                     email=form.email.data,
-                    image=image_url,
+                    image=image_filename,
                     password=generate_password_hash(form.password.data))
         db.session.add(user)
         try:
@@ -60,9 +59,22 @@ def login():
     return redirect(url_for('index'))
 
 
-@login_required
 @user_page.route('/logout')
+@login_required
 def logout():
     logout_user()
     flash('You have been logged out.')
     return redirect(url_for('index'))
+
+
+@user_page.route('/profile')
+@login_required
+def profile():
+    return render_template('user/profile.html',
+                           current_user=current_user)
+
+
+@user_page.route('/timeline')
+@login_required
+def timeline():
+    return render_template('timeline.html')

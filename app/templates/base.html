@@ -57,6 +57,8 @@
                     <li><a href="#login" data-toggle="modal"
                                     data-keyboard="false">Login</a></li>
                 {% else %}
+                    <li><a href="{{ url_for('user_page.timeline') }}">Timeline</a></li>
+                    <li><a href="{{ url_for('user_page.profile') }}">My Profile</a></li>
                     <li><a href="{{ url_for('user_page.logout') }}">Logout</a></li>
                 {% endif %}
             </ul>
