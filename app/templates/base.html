@@ -52,10 +52,11 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ url_for('tweet_page.tweets') }}">Tweets</a></li>
                 {% if not current_user.is_authenticated %}
                     <li><a href="{{ url_for('user_page.register') }}">Sign Up</a></li>
                     <li><a href="#login" data-toggle="modal"
-                                    data-keyboard="false">Login</a></li>
+                           data-keyboard="false">Login</a></li>
                 {% else %}
                     <li><a href="{{ url_for('tweet_page.timeline') }}">Timeline</a></li>
                     <li><a href="{{ url_for('user_page.profile') }}">My Profile</a></li>
