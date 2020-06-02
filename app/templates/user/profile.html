@@ -66,8 +66,12 @@
                                     <a href="#tweets" aria-controls="tweets" role="tab" data-toggle="tab">Tweets</a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#followings" aria-controls="followings" role="tab"
+                                    <a href="#followers" aria-controls="followers" role="tab"
                                        data-toggle="tab">Followers</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#followings" aria-controls="followings" role="tab"
+                                       data-toggle="tab">Followings</a>
                                 </li>
                             </ul>
 
@@ -101,8 +105,40 @@
                                         </div>
                                     {% endfor %}
                                 </div>
-                                <div role="tabpanel" class="tab-pane" id="followings">
+                                <div role="tabpanel" class="tab-pane" id="followers">
                                     {% for follower in followed_by %}
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="row pad">
+                                                    <div class="col-lg-2">
+                                                        <img src="{{ follower.image }}" class="img-circle"
+                                                             style="width: 60px; height: 60px;"/>
+                                                    </div>
+                                                    <div class="col-lg-10">
+                                                        <div>
+                                                            <strong class="mid">{{ follower.name }}</strong>
+                                                            <small><em>
+                                                                <a href="{{ url_for('user_page.profile', username=follower.username) }}">
+                                                                    @{{ follower.username }}
+                                                                </a>
+                                                            </em></small>
+                                                        </div>
+                                                        <div class="row pad">
+                                                            <hr/>
+                                                            <div class="col-lg-12">
+                                                                <i class="glyphicon glyphicon-th-list"></i>
+                                                                {{ follower.followed_by.all()|length }}
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="followings">
+                                    {% for follower in following %}
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="row pad">

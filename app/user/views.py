@@ -86,6 +86,7 @@ def profile(username):
     tweets = Tweet.query.filter_by(user=user).all()
     current_time = datetime.now()
     followed_by = user.followed_by.all()
+    following = user.following.all()
 
     if current_user == user:
         display_follow = False
@@ -97,4 +98,5 @@ def profile(username):
                            tweets=tweets,
                            current_time=current_time,
                            followed_by=followed_by,
+                           following=following,
                            display_follow=display_follow)
