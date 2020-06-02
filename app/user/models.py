@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
     image = db.Column(db.String(100))
     created = db.Column(db.DateTime, default=datetime.now)
     slug = db.Column(db.String(), nullable=True)
+    tweets = db.relationship('Tweet', backref='user', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.name)

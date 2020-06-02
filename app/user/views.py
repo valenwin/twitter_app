@@ -72,9 +72,3 @@ def logout():
 def profile():
     return render_template('user/profile.html',
                            current_user=current_user)
-
-
-@user_page.route('/timeline')
-@login_required
-def timeline():
-    return render_template('timeline.html')

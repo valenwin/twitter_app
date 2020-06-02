@@ -3,9 +3,9 @@ from flask import Blueprint
 from app import login_manager
 from app.user.models import User
 
-user_page = Blueprint('user_page', __name__)
+tweet_page = Blueprint('tweet_page', __name__)
 
-from app.user import views
+from app.tweet import views
 
 
 @login_manager.user_loader

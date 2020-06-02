@@ -18,7 +18,10 @@ migrate = Migrate(app, db)
 
 # Blueprints
 from .user import user_page
+from .tweet import tweet_page
 app.register_blueprint(user_page, url_prefix='/user')
+app.register_blueprint(tweet_page, url_prefix='/tweet')
 
 from . import routes, models
-from .user import routes, models
+from .user import views, models
+from .tweet import views, models
