@@ -12,7 +12,8 @@ NotNullColumn = partial(Column, nullable=False)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = NotNullColumn(db.String(250))
+    name = db.Column(db.String(250))
+    username = NotNullColumn(db.String(250), unique=True)
     email = NotNullColumn(db.String, unique=True)
     password = NotNullColumn(db.String)
     image = db.Column(db.String(100))

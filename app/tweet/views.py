@@ -1,9 +1,10 @@
 from datetime import datetime
 
-from flask import flash
+from flask import flash, abort
 from flask import render_template, redirect, url_for
 from flask_login import login_required, current_user
 
+from app.user.models import User
 from . import tweet_page
 from .forms import TweetForm
 from .models import Tweet
@@ -28,17 +29,33 @@ def time_since(delta):
         return 'Just now'
 
 
-@tweet_page.route('/timeline')
+@tweet_page.route('/timeline', defaults={'username': None})
+@tweet_page.route('/timeline/<username>')
 @login_required
-def timeline():
+def timeline(username):
+    total_tweets = 0
     form = TweetForm()
-    tweets = Tweet.query.filter_by(user_id=current_user.id) \
+
+    if username:
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            abort(404)
+        user_id = user.id
+    else:
+        user = current_user
+        user_id = current_user.id
+
+    tweets = Tweet.query.filter_by(user_id=user_id) \
         .order_by(Tweet.created.desc()).all()
+    for tweet in tweets:
+        total_tweets += 1
     current_time = datetime.now()
     return render_template('tweet/timeline.html',
                            form=form,
                            tweets=tweets,
-                           current_time=current_time)
+                           current_time=current_time,
+                           current_user=user,
+                           total_tweets=total_tweets)
 
 
 @tweet_page.route('/post_tweet', methods=['POST'])

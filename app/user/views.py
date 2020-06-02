@@ -23,6 +23,7 @@ def register():
             image_filename = config.Config.DEFAULT_URL_IMG
 
         user = User(name=form.name.data,
+                    username=form.username.data,
                     email=form.email.data,
                     image=image_filename,
                     password=generate_password_hash(form.password.data))
@@ -51,7 +52,7 @@ def login():
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
                 flash('You have been successfully logged in.')
-                return redirect(url_for('index'))
+                return redirect(url_for('user_page.profile'))
             flash('Login failed.')
         except AttributeError:
             pass
