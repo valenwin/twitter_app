@@ -25,7 +25,7 @@
                             <div class="col-lg-4 col-lg-offset-2 text-center">
                                 <strong>
                                     Tweets <br/>
-                                    {{ total_tweets }}
+                                    {{ tweets|length }}
                                 </strong>
                             </div>
                             <div class="col-lg-4 text-center">
@@ -58,7 +58,11 @@
                                                 <!-- <i class="glyphicon glyphicon-user"></i>  -->
                                                 <img src="{{ tweet.user.image }}" style="width: 30px; height: 30px;"
                                                      class="img-circle">
-                                                <strong>{{ tweet.user.name }}</strong>
+                                                <strong>
+                                                    <a href="{{ url_for('user_page.profile', username=tweet.user.username) }}">
+                                                        {{ tweet.user.name }}
+                                                    </a>
+                                                </strong>
                                                 <small><em>@{{ tweet.user.username }}</em></small>
                                             </div>
                                             <div class="col-lg-2 text-right">

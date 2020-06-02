@@ -33,7 +33,6 @@ def time_since(delta):
 @tweet_page.route('/timeline/<username>')
 @login_required
 def timeline(username):
-    total_tweets = 0
     form = TweetForm()
 
     if username:
@@ -45,15 +44,12 @@ def timeline(username):
 
     tweets = Tweet.query.filter_by(user=user) \
         .order_by(Tweet.created.desc()).all()
-    for tweet in tweets:
-        total_tweets += 1
     current_time = datetime.now()
     return render_template('tweet/timeline.html',
                            form=form,
                            tweets=tweets,
                            current_time=current_time,
-                           current_user=user,
-                           total_tweets=total_tweets)
+                           current_user=user)
 
 
 @tweet_page.route('/post_tweet', methods=['POST'])

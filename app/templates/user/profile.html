@@ -40,8 +40,17 @@
                         </li>
                         <li class="list-group-item">
                             <i class="glyphicon glyphicon-th-list"></i> FOLLOWERS COUNT:
-                            <strong class="pull-right">300</strong>
+                            <strong class="pull-right">{{ followed_by|length }}</strong>
                         </li>
+                        {% if display_follow %}
+                            <li class="list-group-item">
+                                &nbsp;<strong class="pull-right">
+                                <a href="{{ url_for('follower_page.follow', username=current_user.username) }}">
+                                    FOLLOW
+                                </a>
+                            </strong>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -67,51 +76,62 @@
                                 <div role="tabpanel" class="tab-pane active" id="tweets">
                                     {% for tweet in tweets %}
                                         <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="row pad">
-                                                <div class="col-lg-2">
-                                                    <img src="{{ tweet.user.image }}" class="img-circle"
-                                                         style="width: 60px; height: 60px;"/>
-                                                </div>
-                                                <div class="col-lg-10">
-                                                    <div>
-                                                        <strong class="mid">{{ tweet.user.name }}</strong>
-                                                        <small><em>@{{ tweet.user.username }}</em></small> .
-                                                        {{ (current_time - tweet.created)|time_since }}
+                                            <div class="col-lg-12">
+                                                <div class="row pad">
+                                                    <div class="col-lg-2">
+                                                        <img src="{{ tweet.user.image }}" class="img-circle"
+                                                             style="width: 60px; height: 60px;"/>
                                                     </div>
-                                                    <div class="pad">
-                                                        {{ tweet.text }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="followings">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="row pad">
-                                                <div class="col-lg-2">
-                                                    <img src="./imgs/anonymous.png" class="img-circle"
-                                                         style="width: 60px; height: 60px;"/>
-                                                </div>
-                                                <div class="col-lg-10">
-                                                    <div>
-                                                        <strong class="mid">May Joanna</strong>
-                                                        <small><em>@real_mayJoanna</em></small>
-                                                    </div>
-                                                    <div class="row pad">
-                                                        <hr/>
-                                                        <div class="col-lg-12">
-                                                            <i class="glyphicon glyphicon-th-list"></i> 400,000
-                                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <div class="col-lg-10">
+                                                        <div>
+                                                            <strong class="mid">
+                                                                <a href="{{ url_for('tweet_page.timeline', username=tweet.user.username) }}">
+                                                                    {{ tweet.user.name }}
+                                                                </a>
+                                                            </strong>
+                                                            <small><em>@{{ tweet.user.username }}</em></small> .
+                                                            {{ (current_time - tweet.created)|time_since }}
+                                                        </div>
+                                                        <div class="pad">
+                                                            {{ tweet.text }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="followings">
+                                    {% for follower in followed_by %}
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="row pad">
+                                                    <div class="col-lg-2">
+                                                        <img src="{{ follower.image }}" class="img-circle"
+                                                             style="width: 60px; height: 60px;"/>
+                                                    </div>
+                                                    <div class="col-lg-10">
+                                                        <div>
+                                                            <strong class="mid">{{ follower.name }}</strong>
+                                                            <small><em>
+                                                                <a href="{{ url_for('user_page.profile', username=follower.username) }}">
+                                                                    @{{ follower.username }}
+                                                                </a>
+                                                            </em></small>
+                                                        </div>
+                                                        <div class="row pad">
+                                                            <hr/>
+                                                            <div class="col-lg-12">
+                                                                <i class="glyphicon glyphicon-th-list"></i>
+                                                                {{ follower.followed_by.all()|length }}
+                                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

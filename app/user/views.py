@@ -34,7 +34,8 @@ def register():
         try:
             db.session.commit()
             flash('You have been successfully registered.')
-            return redirect(url_for('index'))
+            login_user(user)
+            return redirect(url_for('user_page.profile'))
         except IntegrityError:
             db.session.rollback()
             flash('This email is already exist.')
@@ -75,6 +76,7 @@ def logout():
 @user_page.route('/profile/<username>')
 @login_required
 def profile(username):
+    display_follow = True
     if username:
         user = User.query.filter_by(username=username).first()
         if not user:
@@ -83,7 +85,16 @@ def profile(username):
         user = current_user
     tweets = Tweet.query.filter_by(user=user).all()
     current_time = datetime.now()
+    followed_by = user.followed_by.all()
+
+    if current_user == user:
+        display_follow = False
+    elif current_user in followed_by:
+        display_follow = False
+
     return render_template('user/profile.html',
                            current_user=user,
                            tweets=tweets,
-                           current_time=current_time)
+                           current_time=current_time,
+                           followed_by=followed_by,
+                           display_follow=display_follow)
