@@ -1,9 +1,12 @@
-from flask import render_template, redirect, url_for, flash
+from datetime import datetime
+
+from flask import render_template, redirect, url_for, flash, abort
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_uploads import UploadSet, configure_uploads, IMAGES
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from app.tweet.models import Tweet
 from . import user_page
 from .forms import RegisterForm, LoginForm
 from .models import User
@@ -68,8 +71,19 @@ def logout():
     return redirect(url_for('index'))
 
 
-@user_page.route('/profile')
+@user_page.route('/profile', defaults={'username': None})
+@user_page.route('/profile/<username>')
 @login_required
-def profile():
+def profile(username):
+    if username:
+        user = User.query.filter_by(username=username).first()
+        if not user:
+            abort(404)
+    else:
+        user = current_user
+    tweets = Tweet.query.filter_by(user=user).all()
+    current_time = datetime.now()
     return render_template('user/profile.html',
-                           current_user=current_user)
+                           current_user=user,
+                           tweets=tweets,
+                           current_time=current_time)

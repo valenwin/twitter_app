@@ -40,12 +40,10 @@ def timeline(username):
         user = User.query.filter_by(username=username).first()
         if not user:
             abort(404)
-        user_id = user.id
     else:
         user = current_user
-        user_id = current_user.id
 
-    tweets = Tweet.query.filter_by(user_id=user_id) \
+    tweets = Tweet.query.filter_by(user=user) \
         .order_by(Tweet.created.desc()).all()
     for tweet in tweets:
         total_tweets += 1
