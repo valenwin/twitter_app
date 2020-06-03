@@ -58,11 +58,21 @@ def timeline(username):
             .order_by(Tweet.created.desc()).all()
 
     current_time = datetime.now()
+
+    who_watch = User.query \
+        .filter(User.id != user.id) \
+        .order_by(db.func.random()) \
+        .limit(4).all()
+
+    followed_by = user.followed_by.all()
+
     return render_template('tweet/timeline.html',
                            form=form,
                            tweets=tweets,
                            current_time=current_time,
-                           current_user=user)
+                           current_user=user,
+                           who_watch=who_watch,
+                           followed_by=followed_by)
 
 
 @tweet_page.route('/post_tweet', methods=['POST'])

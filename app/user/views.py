@@ -93,10 +93,16 @@ def profile(username):
     elif current_user in followed_by:
         display_follow = False
 
+    who_watch = User.query \
+        .filter(User.id != user.id) \
+        .order_by(db.func.random()) \
+        .limit(4).all()
+
     return render_template('user/profile.html',
                            current_user=user,
                            tweets=tweets,
                            current_time=current_time,
                            followed_by=followed_by,
                            following=following,
-                           display_follow=display_follow)
+                           display_follow=display_follow,
+                           who_watch=who_watch)
